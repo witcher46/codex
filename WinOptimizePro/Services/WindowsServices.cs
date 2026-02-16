@@ -75,7 +75,7 @@ public sealed class CleanerService : ICleanerService
     {
         if (!Directory.Exists(path)) return 0;
         long deleted = 0;
-        foreach (var file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+        foreach (var file in EnumerateFilesSafe(path))
         {
             try
             {
@@ -91,6 +91,47 @@ public sealed class CleanerService : ICleanerService
         }
 
         return deleted;
+    }
+
+    private static IEnumerable<string> EnumerateFilesSafe(string rootPath)
+    {
+        var directories = new Stack<string>();
+        directories.Push(rootPath);
+
+        while (directories.Count > 0)
+        {
+            var currentDirectory = directories.Pop();
+
+            IEnumerable<string> files;
+            try
+            {
+                files = Directory.EnumerateFiles(currentDirectory);
+            }
+            catch
+            {
+                continue;
+            }
+
+            foreach (var file in files)
+            {
+                yield return file;
+            }
+
+            IEnumerable<string> subDirectories;
+            try
+            {
+                subDirectories = Directory.EnumerateDirectories(currentDirectory);
+            }
+            catch
+            {
+                continue;
+            }
+
+            foreach (var subDirectory in subDirectories)
+            {
+                directories.Push(subDirectory);
+            }
+        }
     }
 
     private static long EmptyRecycleBin()

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using System.Windows;
 using WinOptimizePro.Core;
 using WinOptimizePro.Models;
@@ -61,11 +62,11 @@ public sealed class MainViewModel : ObservableObject
         this.backupSafetyService = backupSafetyService;
         this.loggerService = loggerService;
 
-        AnalyzeCommand = new RelayCommand(async _ => await AnalyzeAsync());
-        OneClickOptimizeCommand = new RelayCommand(async _ => await OneClickOptimizeAsync());
-        CleanCommand = new RelayCommand(async _ => await CleanAsync());
-        BrowserCleanCommand = new RelayCommand(async _ => await BrowserCleanAsync());
-        ScanMalwareCommand = new RelayCommand(async _ => await ScanMalwareAsync());
+        AnalyzeCommand = new AsyncRelayCommand(_ => RunCommandAsync(AnalyzeAsync));
+        OneClickOptimizeCommand = new AsyncRelayCommand(_ => RunCommandAsync(OneClickOptimizeAsync));
+        CleanCommand = new AsyncRelayCommand(_ => RunCommandAsync(CleanAsync));
+        BrowserCleanCommand = new AsyncRelayCommand(_ => RunCommandAsync(BrowserCleanAsync));
+        ScanMalwareCommand = new AsyncRelayCommand(_ => RunCommandAsync(ScanMalwareAsync));
         ToggleThemeCommand = new RelayCommand(_ => IsDarkMode = !IsDarkMode);
     }
 
@@ -76,12 +77,12 @@ public sealed class MainViewModel : ObservableObject
     public ObservableCollection<ScanFinding> Findings { get; } = new();
     public ObservableCollection<string> PrivacyRisks { get; } = new();
 
-    public RelayCommand AnalyzeCommand { get; }
-    public RelayCommand OneClickOptimizeCommand { get; }
-    public RelayCommand CleanCommand { get; }
-    public RelayCommand BrowserCleanCommand { get; }
-    public RelayCommand ScanMalwareCommand { get; }
-    public RelayCommand ToggleThemeCommand { get; }
+    public ICommand AnalyzeCommand { get; }
+    public ICommand OneClickOptimizeCommand { get; }
+    public ICommand CleanCommand { get; }
+    public ICommand BrowserCleanCommand { get; }
+    public ICommand ScanMalwareCommand { get; }
+    public ICommand ToggleThemeCommand { get; }
 
     public bool IsDarkMode
     {
@@ -194,6 +195,20 @@ public sealed class MainViewModel : ObservableObject
         catch (Exception ex)
         {
             StatusMessage = $"Optimization failed: {ex.Message}";
+            await loggerService.LogAsync(StatusMessage);
+            MessageBox.Show(StatusMessage, "WinOptimizePro", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
+    private async Task RunCommandAsync(Func<Task> action)
+    {
+        try
+        {
+            await action();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Operation failed: {ex.Message}";
             await loggerService.LogAsync(StatusMessage);
             MessageBox.Show(StatusMessage, "WinOptimizePro", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
