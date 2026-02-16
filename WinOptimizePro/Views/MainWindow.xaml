@@ -4,95 +4,157 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="WinOptimizePro" Height="820" Width="1320" WindowStartupLocation="CenterScreen">
+        Title="WinOptimizePro // Cyber Ops"
+        Height="860"
+        Width="1420"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Storyboard x:Key="PulseStoryboard" RepeatBehavior="Forever" AutoReverse="True">
+            <DoubleAnimation Storyboard.TargetName="HealthRingGlow" Storyboard.TargetProperty="Opacity" From="0.35" To="0.9" Duration="0:0:1.3" />
+        </Storyboard>
+
+        <Storyboard x:Key="ScanLineStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="ScanLine" Storyboard.TargetProperty="(Canvas.Top)" From="0" To="176" Duration="0:0:2.4" />
+        </Storyboard>
+
+        <Storyboard x:Key="ChartDotStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="ChartDot" Storyboard.TargetProperty="(Canvas.Left)" From="20" To="270" Duration="0:0:2.7" AutoReverse="True" />
+        </Storyboard>
+
+        <Storyboard x:Key="ParticleStoryboard" RepeatBehavior="Forever" AutoReverse="True">
+            <DoubleAnimation Storyboard.TargetName="ParticleOne" Storyboard.TargetProperty="(Canvas.Top)" From="600" To="120" Duration="0:0:9" />
+            <DoubleAnimation Storyboard.TargetName="ParticleTwo" Storyboard.TargetProperty="(Canvas.Top)" From="420" To="60" Duration="0:0:7" />
+            <DoubleAnimation Storyboard.TargetName="ParticleThree" Storyboard.TargetProperty="(Canvas.Left)" From="1200" To="900" Duration="0:0:8" />
+        </Storyboard>
+    </Window.Resources>
+
     <Grid>
+        <Canvas IsHitTestVisible="False" Opacity="0.45">
+            <Ellipse x:Name="ParticleOne" Width="8" Height="8" Fill="{StaticResource Brush.NeonGreen}" Canvas.Left="980" Canvas.Top="600" />
+            <Ellipse x:Name="ParticleTwo" Width="6" Height="6" Fill="{StaticResource Brush.NeonPurple}" Canvas.Left="540" Canvas.Top="420" />
+            <Ellipse x:Name="ParticleThree" Width="10" Height="10" Fill="#8039FFB6" Canvas.Left="1200" Canvas.Top="180" />
+        </Canvas>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="260" />
+            <ColumnDefinition Width="290" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Background="#1F2937" Padding="18">
-            <StackPanel>
-                <TextBlock Text="WinOptimizePro" FontSize="24" FontWeight="Bold" Foreground="White" />
-                <TextBlock Text="Desktop Optimization Suite" Foreground="#9CA3AF" Margin="0,2,0,22" />
+        <Border Grid.Column="0" Background="{StaticResource Brush.Sidebar}" Padding="18" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,1,0">
+            <DockPanel LastChildFill="True">
+                <StackPanel>
+                    <TextBlock Text="WINOPTIMIZE.PRO" FontSize="22" FontWeight="Bold" Foreground="{StaticResource Brush.NeonGreen}" />
+                    <TextBlock Text="Cyberpunk System Optimizer" Style="{StaticResource MutedTextStyle}" Margin="0,2,0,20" />
 
-                <Button Content="Analyze System" Command="{Binding AnalyzeCommand}" />
-                <Button Content="One-Click Optimize" Command="{Binding OneClickOptimizeCommand}" FontWeight="Bold" />
-                <Button Content="Clean Temp &amp; Junk" Command="{Binding CleanCommand}" />
-                <Button Content="Clean Browsers" Command="{Binding BrowserCleanCommand}" />
-                <Button Content="Quick Malware Scan" Command="{Binding ScanMalwareCommand}" />
-                <Button Content="Toggle Dark/Light" Command="{Binding ToggleThemeCommand}" Margin="6,20,6,6" />
+                    <Button Content="▶ Analyze System" Command="{Binding AnalyzeCommand}" Style="{StaticResource GlowButtonStyle}" />
+                    <Button Content="⚡ One-Click Boost" Command="{Binding OneClickOptimizeCommand}" FontWeight="Bold" Style="{StaticResource GlowButtonStyle}" />
+                    <Button Content="🧹 Cleaner Module" Command="{Binding CleanCommand}" Style="{StaticResource GlowButtonStyle}" />
+                    <Button Content="🧠 RAM / Browser Boost" Command="{Binding BrowserCleanCommand}" Style="{StaticResource GlowButtonStyle}" />
+                    <Button Content="🛡 Security Scan" Command="{Binding ScanMalwareCommand}" Style="{StaticResource GlowButtonStyle}" />
+                    <Button Content="Theme Toggle" Command="{Binding ToggleThemeCommand}" Style="{StaticResource GlowButtonStyle}" Margin="0,10,0,0" />
+                </StackPanel>
 
-                <Border Background="#111827" CornerRadius="8" Margin="0,24,0,0" Padding="10">
+                <Border DockPanel.Dock="Bottom" Margin="0,20,0,0" Background="#111A2E" CornerRadius="10" Padding="10" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Status" Foreground="#9CA3AF" />
-                        <TextBlock Text="{Binding StatusMessage}" Foreground="White" TextWrapping="Wrap" />
+                        <TextBlock Text="LIVE OPS LOG" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonPurple}" />
+                        <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" Style="{StaticResource MutedTextStyle}" />
                     </StackPanel>
                 </Border>
-            </StackPanel>
+            </DockPanel>
         </Border>
 
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Background="#F3F4F6">
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Background="Transparent">
             <StackPanel Margin="24">
-                <TextBlock Text="System Dashboard" FontSize="28" FontWeight="Bold" />
+                <Border Style="{StaticResource MetricCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="DASHBOARD" FontSize="28" FontWeight="Bold" />
+                            <TextBlock Text="Gamified optimization with real-time telemetry and one-click hardening." Style="{StaticResource MutedTextStyle}" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <Border Grid.Column="1" HorizontalAlignment="Right" Padding="10,6" CornerRadius="8" BorderBrush="{StaticResource Brush.NeonGreen}" BorderThickness="1" Background="#141E34">
+                            <TextBlock Text="SYSTEM ONLINE" Foreground="{StaticResource Brush.NeonGreen}" FontWeight="Bold" />
+                        </Border>
+                    </Grid>
+                </Border>
 
-                <UniformGrid Columns="4" Margin="0,16,0,12">
-                    <Border Background="White" Margin="6" CornerRadius="10" Padding="16">
+                <UniformGrid Columns="4" Margin="0,10,0,10">
+                    <Border Style="{StaticResource MetricCardStyle}">
                         <StackPanel>
-                            <TextBlock Text="CPU Usage" FontWeight="SemiBold" />
-                            <ProgressBar Value="{Binding CpuUsage}" Maximum="100" Height="16" Margin="0,8,0,4" />
-                            <TextBlock Text="{Binding CpuUsage, StringFormat={}{0:N0}%}" />
+                            <TextBlock Text="CPU" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonGreen}" />
+                            <ProgressBar Value="{Binding CpuUsage}" Maximum="100" />
+                            <TextBlock Text="{Binding CpuUsage, StringFormat={}{0:N0}%}" FontSize="18" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
-                    <Border Background="White" Margin="6" CornerRadius="10" Padding="16">
+                    <Border Style="{StaticResource MetricCardStyle}">
                         <StackPanel>
-                            <TextBlock Text="RAM Usage" FontWeight="SemiBold" />
-                            <ProgressBar Value="{Binding RamUsage}" Maximum="100" Height="16" Margin="0,8,0,4" />
-                            <TextBlock Text="{Binding RamUsage, StringFormat={}{0:N0}%}" />
+                            <TextBlock Text="RAM" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonGreen}" />
+                            <ProgressBar Value="{Binding RamUsage}" Maximum="100" />
+                            <TextBlock Text="{Binding RamUsage, StringFormat={}{0:N0}%}" FontSize="18" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
-                    <Border Background="White" Margin="6" CornerRadius="10" Padding="16">
+                    <Border Style="{StaticResource MetricCardStyle}">
                         <StackPanel>
-                            <TextBlock Text="Disk Usage" FontWeight="SemiBold" />
-                            <ProgressBar Value="{Binding DiskUsage}" Maximum="100" Height="16" Margin="0,8,0,4" />
-                            <TextBlock Text="{Binding DiskUsage, StringFormat={}{0:N0}%}" />
+                            <TextBlock Text="DISK" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonGreen}" />
+                            <ProgressBar Value="{Binding DiskUsage}" Maximum="100" />
+                            <TextBlock Text="{Binding DiskUsage, StringFormat={}{0:N0}%}" FontSize="18" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
-                    <Border Background="White" Margin="6" CornerRadius="10" Padding="16">
-                        <StackPanel>
-                            <TextBlock Text="Health Score" FontWeight="SemiBold" />
-                            <TextBlock Text="{Binding HealthScore}" FontSize="44" Foreground="#10B981" FontWeight="Bold" />
-                            <TextBlock Text="Startup Time: ">
-                                <Run Text="{Binding StartupTime}" />
-                            </TextBlock>
-                        </StackPanel>
+                    <Border Style="{StaticResource MetricCardStyle}">
+                        <Grid>
+                            <Ellipse x:Name="HealthRingGlow" Width="100" Height="100" Stroke="{StaticResource Brush.NeonPurple}" StrokeThickness="4" Opacity="0.4" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                            <StackPanel>
+                                <TextBlock Text="HEALTH SCORE" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonPurple}" />
+                                <TextBlock Text="{Binding HealthScore}" FontSize="40" FontWeight="Bold" Foreground="{StaticResource Brush.NeonGreen}" />
+                                <TextBlock Text="{Binding StartupTime, StringFormat=Boot: {0}}" Style="{StaticResource MutedTextStyle}" />
+                            </StackPanel>
+                        </Grid>
                     </Border>
                 </UniformGrid>
 
-                <Grid>
+                <Grid Margin="0,2,0,12">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1.2*" />
+                        <ColumnDefinition Width="0.8*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="14" Margin="6">
+                    <Border Style="{StaticResource MetricCardStyle}" Margin="0,0,10,0">
                         <StackPanel>
-                            <TextBlock Text="Running Processes" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
-                            <ListBox ItemsSource="{Binding Processes}" Height="180" />
+                            <TextBlock Text="ANIMATED SYSTEM TREND" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonPurple}" Margin="0,0,0,8" />
+                            <Grid>
+                                <Canvas Height="160" Background="#0A1324">
+                                    <Polyline Points="20,130 70,70 120,95 170,50 220,80 270,30" Stroke="{StaticResource Brush.NeonGreen}" StrokeThickness="2" />
+                                    <Ellipse x:Name="ChartDot" Width="10" Height="10" Fill="{StaticResource Brush.NeonPurple}" Canvas.Top="25" Canvas.Left="20" />
+                                </Canvas>
+                            </Grid>
+                            <TextBlock Text="Live metric stream (visualized)." Style="{StaticResource MutedTextStyle}" Margin="0,8,0,0" />
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="1" Background="White" CornerRadius="10" Padding="14" Margin="6">
+                    <Border Grid.Column="1" Style="{StaticResource MetricCardStyle}">
                         <StackPanel>
-                            <TextBlock Text="Background Services" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
-                            <ListBox ItemsSource="{Binding Services}" Height="180" />
+                            <TextBlock Text="TERMINAL MODE" FontWeight="SemiBold" Foreground="{StaticResource Brush.NeonGreen}" Margin="0,0,0,8" />
+                            <Grid Height="180" Background="#050B15" ClipToBounds="True">
+                                <ListBox BorderThickness="0" Background="Transparent" Foreground="{StaticResource Brush.NeonGreen}" FontFamily="Consolas">
+                                    <ListBoxItem Content="> init::scanner --deep --sig" />
+                                    <ListBoxItem Content="> checking startup vectors..." />
+                                    <ListBoxItem Content="> checking browser leakage..." />
+                                    <ListBoxItem Content="> scanning temp clusters..." />
+                                    <ListBoxItem Content="> validating system policies..." />
+                                    <ListBoxItem Content="> status: no critical threats" />
+                                </ListBox>
+                                <Rectangle x:Name="ScanLine" Height="4" Fill="{StaticResource Brush.NeonPurple}" Opacity="0.75" Canvas.Top="0" />
+                            </Grid>
                         </StackPanel>
                     </Border>
                 </Grid>
 
-                <TabControl Margin="6,12,6,6">
+                <TabControl Margin="0,0,0,8">
                     <TabItem Header="Cleaner">
-                        <Grid Margin="10">
+                        <Border Style="{StaticResource ModuleCardStyle}" Margin="8">
                             <DataGrid ItemsSource="{Binding CleaningTargets}" AutoGenerateColumns="False" CanUserAddRows="False">
                                 <DataGrid.Columns>
                                     <DataGridCheckBoxColumn Header="Select" Binding="{Binding IsSelected}" />
@@ -101,10 +163,10 @@
                                     <DataGridTextColumn Header="Estimated MB" Binding="{Binding EstimatedBytes, StringFormat={}{0:N0}}" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </Grid>
+                        </Border>
                     </TabItem>
-                    <TabItem Header="Startup Optimizer">
-                        <Grid Margin="10">
+                    <TabItem Header="RAM Booster">
+                        <Border Style="{StaticResource ModuleCardStyle}" Margin="8">
                             <DataGrid ItemsSource="{Binding StartupItems}" AutoGenerateColumns="False" CanUserAddRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Program" Binding="{Binding Name}" Width="*" />
@@ -113,10 +175,10 @@
                                     <DataGridTextColumn Header="Recommendation" Binding="{Binding Recommendation}" Width="2*" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </Grid>
+                        </Border>
                     </TabItem>
-                    <TabItem Header="Security Scan">
-                        <Grid Margin="10">
+                    <TabItem Header="Security">
+                        <Border Style="{StaticResource ModuleCardStyle}" Margin="8">
                             <DataGrid ItemsSource="{Binding Findings}" AutoGenerateColumns="False" CanUserAddRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="File" Binding="{Binding FilePath}" Width="2*" />
@@ -124,15 +186,24 @@
                                     <DataGridTextColumn Header="Risk" Binding="{Binding RiskLevel}" Width="Auto" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </Grid>
+                        </Border>
                     </TabItem>
-                    <TabItem Header="Privacy Risks">
-                        <Grid Margin="10">
-                            <ListBox ItemsSource="{Binding PrivacyRisks}" />
-                        </Grid>
+                    <TabItem Header="Privacy">
+                        <Border Style="{StaticResource ModuleCardStyle}" Margin="8">
+                            <ListBox ItemsSource="{Binding PrivacyRisks}" Background="#081125" BorderBrush="{StaticResource Brush.Border}" Foreground="{StaticResource Brush.TextPrimary}" />
+                        </Border>
                     </TabItem>
                 </TabControl>
             </StackPanel>
         </ScrollViewer>
     </Grid>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource PulseStoryboard}" />
+            <BeginStoryboard Storyboard="{StaticResource ScanLineStoryboard}" />
+            <BeginStoryboard Storyboard="{StaticResource ChartDotStoryboard}" />
+            <BeginStoryboard Storyboard="{StaticResource ParticleStoryboard}" />
+        </EventTrigger>
+    </Window.Triggers>
 </Window>
