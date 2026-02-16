@@ -16,6 +16,53 @@ WinOptimizePro is a professional Windows desktop optimization and maintenance ap
 - Safety-first flow with backup and restore-point service hooks and structured logs.
 - Modern dashboard UX with tabbed modules and one-click optimization.
 
+## Cyberpunk UI/UX Design System
+
+### Color Palette
+
+- `#05070D`: Deep background
+- `#0A1222`: Primary surface
+- `#111A2E`: Elevated surface
+- `#39FFB6`: Neon green action accent
+- `#AD6BFF`: Neon purple secondary accent
+- `#FF5EA8`: Warning accent
+- `#E3F3FF`: Primary text
+- `#8CA4C7`: Muted telemetry text
+
+### Theme System (WPF Resource Dictionaries)
+
+- `Themes/CyberpunkPalette.xaml`
+  - Centralized color tokens and brushes.
+- `Themes/CyberpunkControls.xaml`
+  - Glow button templates, metric cards, module cards, DataGrid styling, and typography defaults.
+- `App.xaml`
+  - Merges both dictionaries into global application resources.
+
+### UI Architecture
+
+1. **Sidebar Control Plane**
+   - One-click boost, cleaner, RAM/browser optimization, and security scan as high-priority CTA buttons.
+   - Persistent live status block for operational feedback.
+2. **Dashboard Layer**
+   - Real-time metric cards (CPU, RAM, Disk, Health Score).
+   - Animated trend visualization and terminal scan panel.
+3. **Module Workspace**
+   - Tabs: Cleaner, RAM Booster, Security, Privacy.
+   - Data-heavy views use themed DataGrid/ListBox styles for consistency.
+4. **Motion Layer**
+   - Pulse animation for health score ring.
+   - Scanline animation for fake terminal hacker scan effect.
+   - Chart dot motion for live signal simulation.
+   - Particle backdrop animation for subtle cyberpunk ambience.
+
+### XAML Templates & Effects Included
+
+- `GlowButtonStyle`: neon border, hover color shift, glow swap, press scale feedback.
+- `MetricCardStyle`: elevated glass-like cards with purple glow.
+- `ModuleCardStyle`: consistent tab-content framing.
+- Terminal panel with moving scanline and hacker-style log lines.
+- Animated particle canvas for atmospheric background effects.
+
 ## Folder Structure
 
 ```text
@@ -37,6 +84,9 @@ WinOptimizePro is a professional Windows desktop optimization and maintenance ap
     ├── Services/
     │   ├── Interfaces.cs
     │   └── WindowsServices.cs
+    ├── Themes/
+    │   ├── CyberpunkControls.xaml
+    │   └── CyberpunkPalette.xaml
     ├── ViewModels/
     │   └── MainViewModel.cs
     └── Views/
@@ -77,7 +127,7 @@ WinOptimizePro is a professional Windows desktop optimization and maintenance ap
   - Aggregates data from all service modules and drives dashboard state.
 
 ### 5. Views (`Views/`)
-- `MainWindow.xaml`: Modern dashboard with sidebar actions, status panel, metric cards, and module tabs.
+- `MainWindow.xaml`: Cyberpunk dashboard with animated telemetry cards, terminal mode, module tabs, glow effects, and gamified one-click optimization flow.
 - `MainWindow.xaml.cs`: Injects the `MainViewModel` into the view.
 
 ## One-Click Optimization Flow
